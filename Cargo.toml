@@ -1,0 +1,20 @@
+[package]
+name = "julgebla"
+version = "0.1.0"
+edition = "2021"
+
+[workspace]
+
+[features]
+
+[dependencies]
+num-traits = "0.2"
+rand = "0.8.5"
+bytemuck = {version="1.4.1", featuers="derive"}
+blas-sys = {version="0.7.1"}
+openblas-src = {version="0.10.8"}
+# https://docs.rs/lapack-src/0.8.0/lapack_src/
+lapack-src = {version="0.8.0", features = ["openblas"]}
+lapack-sys = {version="0.14.0"}
+rayon = "1.7.0"
+itertools = "0.10.5"
