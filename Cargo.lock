@@ -301,7 +301,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "julgebla"
+name = "julgebra"
 version = "0.1.0"
 dependencies = [
  "blas-sys",
