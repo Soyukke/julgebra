@@ -83,9 +83,6 @@ impl<T: Mul<Output = T> + Sub<Output=T> + Div<Output=T> + AddAssign + Default + 
     }
 
     
-    fn inv(&self) -> Matrix<T> {
-        todo!();
-    }
 
     fn svd(&self) -> Matrix<T> {
         todo!();

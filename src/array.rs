@@ -75,7 +75,7 @@ impl<T, const D: usize> std::ops::Index<([usize; D])> for Array<T, D> {
         let mut idx = 0;
         let mut stride = 1;
         // x[n-1] + x[n-2]*D[n-1] + x[n-3]*D[n-2]*D[n-1] + ... + x[0]*D[1]*D[2]*...*D[n-1]
-        for i in (0..n).rev() {
+        for i in (0..n) {
             idx += dims[i] * stride;
             stride *= self.dims[i];
         }
@@ -83,7 +83,7 @@ impl<T, const D: usize> std::ops::Index<([usize; D])> for Array<T, D> {
     }
 }
 
-// Row-Major like Z
+// Col-Major like Z
 impl<T , const D: usize> std::ops::IndexMut<[usize; D]> for Array<T, D> {
     fn index_mut(&mut self, dims: [usize; D]) -> &mut Self::Output {
         //println!("data: {:?}", self.data);
@@ -91,7 +91,7 @@ impl<T , const D: usize> std::ops::IndexMut<[usize; D]> for Array<T, D> {
         let mut idx = 0;
         let mut stride = 1;
         // x[n-1] + x[n-2]*D[n-1] + x[n-3]*D[n-2]*D[n-1] + ... + x[0]*D[1]*D[2]*...*D[n-1]
-        for i in (0..n).rev() {
+        for i in (0..n) {
             idx += dims[i] * stride;
             stride *= self.dims[i];
         }

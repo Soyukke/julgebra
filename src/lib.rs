@@ -1,7 +1,6 @@
 #![crate_name = "julgebla"]
 
 pub mod complex;
-pub mod basic_trait;
 pub mod basic_traits;
 
 pub use basic_traits::*;

@@ -44,24 +44,3 @@ values: 3 Array
 
 ```
 
-
-### Example CUDA
-
-```rust
-use linear_algebra::{Complex, Matrix, Vector};
-use linear_algebra::{CPU,GPU};
-let n = 3;
-let x = Matrix::<f32>::rand([n, n]);
-let y = Matrix::<f32>::rand([n, n]);
-let cx = x.gpu();
-let cy = y.gpu();
-let cz = cx * cy;
-let z = cz.unwrap().cpu();
-println!("z: {}", z);
-
-=> Result
-z: 3x3 Array
- 1.03856  0.81080  0.78834 
- 1.12424  1.01148  0.45698 
- 1.52945  1.29110  0.96300 
-```

@@ -16,6 +16,9 @@ pub struct Complex<T> {
     pub imag: T,
 }
 
+pub type c64 = Complex<f64>;
+pub type c32 = Complex<f32>;
+
 
 impl<T: Copy+One+Default> Complex<T> {
     pub fn new(real:T, imag:T) -> Self {

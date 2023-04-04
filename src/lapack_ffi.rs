@@ -1,6 +1,5 @@
-use crate::array::{Array, Vector, Matrix};
-use crate::complex::Complex;
-use crate::basic_traits::transpose::Transpose;
+use crate::array::{Vector, Matrix};
+use crate::complex::{Complex,c64,c32};
 
 use lapack_sys::*;
 use std::ffi::{c_char, CString};
@@ -19,7 +18,7 @@ pub trait Eigen {
 }
 
 impl Matrix<f64> {
-    pub fn eig(&mut self) -> EigenResult<Complex<f64>, f64> {
+    pub fn eig(&mut self) -> EigenResult<c64, f64> {
         let jobvl: *mut c_char = CString::new("V").unwrap().into_raw();
         let jobvr: *mut c_char = CString::new("V").unwrap().into_raw();
         let n: i32 = self.dims[0] as i32;
@@ -75,7 +74,7 @@ impl Matrix<f64> {
 
         }
         // 固有値
-        let mut values: Vector<Complex<f64>> = Vector::zeros([u]);
+        let mut values: Vector<c64> = Vector::zeros([u]);
         for i in 0..u {
             values[[i]] = Complex {real: wr[[i]], imag: wi[[i]]};
         }
@@ -127,8 +126,7 @@ where {
     }
 
     pub fn lu(&self) -> (Matrix<f64>, Matrix<f64>, Matrix<f64>) {
-        // FIXME: ROW-MajorをColumn-Majorにするためにtransposeしているがメモリ確保して無駄なので直したい
-        let mut lu = self.clone().transpose();
+        let mut lu = self.clone();
         let mut ipvt = Vector::<i32>::zeros([self.dims[0]]);
         let mut info = 0;
         let (n, m) = (self.dims[0] as i32, self.dims[1] as i32);
@@ -143,12 +141,42 @@ where {
                 &mut info,
             );
         }
-        let mut lu = lu.transpose();
-        let mut ipvt2 = (ipvt - 1).data;
+        let lu = lu;
+        let ipvt2 = (ipvt - 1).data;
         let p = Matrix::mutation_matrix(ipvt2);
         let u = Matrix::upper_triangular(&lu);
         let l = Matrix::lower_triangular(&lu);
 
         (p, l, u)
     }
+
+    pub fn inv(&self) -> Self {
+        let mut lu = self.clone();
+        let mut ipvt = Vector::<i32>::zeros([self.dims[0]]);
+        let mut info = 0;
+        let (n, m) = (self.dims[0] as i32, self.dims[1] as i32);
+        unsafe {
+            dgetrf_(
+                &n,
+                &m,
+                lu.data.as_mut_ptr(),
+                &n,
+                ipvt.data.as_mut_ptr(),
+                &mut info,
+            );
+
+            let mut work = vec![0f64; 1];
+            let mut lwork = -1;
+            let mut info = 0;
+            dgetri_(&n, lu.data.as_mut_ptr(), &n, ipvt.data.as_mut_ptr(), work.as_mut_ptr(), &lwork, &mut info);
+            lwork = work[0] as i32;
+            work = vec![0f64; work[0] as usize];
+            println!("lwork: {}", lwork);
+            dgetri_(&n, lu.data.as_mut_ptr(), &n, ipvt.data.as_mut_ptr(), work.as_mut_ptr(), &lwork, &mut info);
+        }
+        let lu = lu;
+        lu
+
+    }
+
 }
