@@ -1,4 +1,4 @@
-#![crate_name = "julgebla"]
+#![crate_name = "julgebra"]
 
 pub mod complex;
 pub mod basic_traits;

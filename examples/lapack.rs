@@ -1,4 +1,4 @@
-use julgebla::{Matrix, Transpose};
+use julgebra::{Matrix, Transpose};
 
 fn eig() {
     let mut a = Matrix::<f64>::rand([4, 4]);

@@ -1,4 +1,4 @@
-use julgebla::*;
+use julgebra::*;
 
 fn mul_c() {
     let n = 3;
